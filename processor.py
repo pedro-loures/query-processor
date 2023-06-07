@@ -4,6 +4,12 @@
 import sys
 import argparse
 
+# Internal Import 
+import rankers.BM25 as bm25
+import rankers.TDIDF as tdidf
+import query.matching as matching
+import query.pre_processor as pp
+
 
 
 
@@ -13,6 +19,9 @@ def main():
     """
     Your main calls should be added here
     """
+    queries_dictionary = pp.process_queries(args.query_file)
+
+    print(queries_dictionary)
     print('ok')
 
     return 0
@@ -49,6 +58,6 @@ if __name__ == "__main__":
         type=str,
         help='ranker should be BM25 or TFIDF'
     )
-    
-if __name__ == "__main__":
+
+    args = parser.parse_args()
     main()
