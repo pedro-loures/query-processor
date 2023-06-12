@@ -60,7 +60,8 @@ def main():
 
         # print('----- PART 5 rank using bm25  ------')
         part_time = time.time()
-        query_document_dict = bm25.rank(query_document_dict)
+
+        query_document_dict = bm25.rank(query_document_dict, args.index_file, sizeof_collection, avarage_document_length)
         end_time = time.time()
         timeof_part5 += end_time - part_time
         # print('time = ' +  str(end_time - part_time) )
