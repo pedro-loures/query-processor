@@ -3,6 +3,7 @@
 # External Import
 import sys
 import argparse
+import time 
 
 # Internal Import 
 import rankers.BM25 as bm25
@@ -19,14 +20,44 @@ def main():
     """
     Your main calls should be added here
     """
+    start_time = time.time()
+
+
+    # print('----- PART 1 Process queries ------')
+    part_time = time.time()
     queries_dictionary = pp.process_queries(args.query_file)
+    end_time = time.time()
+    timeof_part1 = end_time - part_time
+    # print('time = ' +  str(end_time - part_time) )
 
 
-    print(queries_dictionary)
+
+    # print(queries_dictionary)
+    timeof_part2 = 0
+    timeof_part3 = 0
     for query_id in queries_dictionary:
+        # print('----- PART 2 create dict from index line  ------')
+        part_time = time.time()
         word_document_dict = matching.create_dict_from_index_line(args.index_file, queries_dictionary[query_id] )
-        matching.calculate_term_relative_frequncy(args.index_file, word_document_dict)
+        end_time = time.time()
+        timeof_part2 += end_time - part_time
+        # print('time = ' +  str(end_time - part_time) )
 
+        # print('----- PART 3 calculate term relative frequency  ------')
+        part_time = time.time()
+        matching.calculate_term_relative_frequency(args.index_file, word_document_dict)
+        end_time = time.time()
+        timeof_part3 += end_time - part_time
+        # print('time = ' +  str(end_time - part_time) )
+
+
+    print('----- PART 1 Process queries ------')
+    print('time = ' +  str(timeof_part1) )
+    print('----- PART 2 create dict from index line  ------')
+    print('time = ' +  str(timeof_part2) )
+    print('----- PART 3 calculate term relative frequency  ------')
+    print('time = ' +  str(timeof_part3) )
+    
     return 0
 
 if __name__ == "__main__":

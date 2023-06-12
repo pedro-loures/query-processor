@@ -58,7 +58,18 @@ def create_dict_from_index_line(index_path, query):
     lexicon.close()
     return query_dict
 
-def calculate_term_relative_frequncy(index_path, word_document_dict):
+def find_document_length(document_index, document):
+    '''
+    finds document length in document index
+    '''
+    document_file = ''
+    while(document != document_file):
+        document_index_line = next(document_index)
+        document_file, document_length = document_index_line.split(':')
+    return int(document_length)
+        # print(document_file, document)
+
+def calculate_term_relative_frequency(index_path, word_document_dict):
     '''
     calculates term relative frequency by comparing to the size of 
     the document in index_path+document_indexer
@@ -66,9 +77,13 @@ def calculate_term_relative_frequncy(index_path, word_document_dict):
 
     document_index = open(index_path + 'document_index', 'r')
     for entry in word_document_dict:
-        documents = word_document_dict[entry]
-        for document in documents:
-            print(documents[document])
+        document_index.seek(0   )
+        documents_keys = sorted(word_document_dict[entry])
+        # print(documents_keys)
+        for document in documents_keys:
+            document_length = find_document_length(document_index, document)    
+            word_document_dict[entry][document]=word_document_dict[entry][document] , document_length,
 
+    # print(word_document_dict)
     document_index.close()
-    return
+    return word_document_dict
