@@ -1,10 +1,3 @@
-# todo list pre-processor
-# TODO 0 create query processosr
-
-
-
-# TODO 0.0 word treatment
-# TODO 0.1 return dict
 
 import nltk
 from nltk.tokenize import word_tokenize

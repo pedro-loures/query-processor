@@ -1,11 +1,3 @@
-#TODO LIST
-#0 TODO Count term frequency in document
-
-
-#0.0 OK Find word in lexicon file
-#0.1 TODO Find line in Index file TEMPORARY
-#0.1 TODO find byte in index file
-#0.2 
 
 
 
