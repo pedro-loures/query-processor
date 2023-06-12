@@ -21,8 +21,11 @@ def main():
     """
     queries_dictionary = pp.process_queries(args.query_file)
 
+
     print(queries_dictionary)
-    print('ok')
+    for query_id in queries_dictionary:
+        word_document_dict = matching.create_dict_from_index_line(args.index_file, queries_dictionary[query_id] )
+        matching.calculate_term_relative_frequncy(args.index_file, word_document_dict)
 
     return 0
 
