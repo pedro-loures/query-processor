@@ -27,7 +27,20 @@ snowball = SnowballStemmer(language='english') # Faster then porter
 WORD_TREATMENT = '0123456789)-–_=+§!@#$%¨&*(´`^~{}[]:;?/,<.>|\\\'\"”“’°ºª'
 
 
+def get_avarage_document_length(index_path):
+    ''' 
+    calculates avarage document length
+    '''
 
+    total_document_length = 0
+    with open(index_path + 'document_index','r') as document_index:
+        for line_number, line in enumerate(document_index):
+            docid, document_length = line.split(':')
+            total_document_length += int(document_length)
+    avarage_document_length = total_document_length / line_number
+    
+    print(line_number, total_document_length, avarage_document_length)
+    return line_number, total_document_length, avarage_document_length
 def process_queries(query_file):
     '''
     given a query csv file (query_id, query) 

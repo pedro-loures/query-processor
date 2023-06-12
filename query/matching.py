@@ -69,10 +69,12 @@ def find_document_length(document_index, document):
     return int(document_length)
         # print(document_file, document)
 
-def calculate_term_relative_frequency(index_path, word_document_dict):
+def update_document_length(index_path, word_document_dict):
     '''
     calculates term relative frequency by comparing to the size of 
     the document in index_path+document_indexer
+
+    Returns docuemn
     '''
 
     document_index = open(index_path + 'document_index', 'r')
