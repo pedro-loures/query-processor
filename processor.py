@@ -15,13 +15,9 @@ import query.pre_processor as pp
 
 
 def main():
-
-
-    """
-    Your main calls should be added here
-    """
     start_time = time.time()
-
+    file = open('result/ranking.csv', 'w')
+    file.write('QueryId,EntityId\n'   )
 
     # print('----- PART 1 Process queries ------')
     part_time = time.time()
@@ -43,6 +39,7 @@ def main():
     timeof_part3 = 0
     timeof_part4 = 0
     timeof_part5 = 0
+    timeof_part6 = 0
     for query_id in queries_dictionary:
         # print('----- PART 3 create dict from index line  ------')
         part_time = time.time()
@@ -60,11 +57,19 @@ def main():
 
         # print('----- PART 5 rank using bm25  ------')
         part_time = time.time()
-
-        query_document_dict = bm25.rank(query_document_dict, args.index_file, sizeof_collection, avarage_document_length)
+        ranking = bm25.rank(query_document_dict, args.index_file, sizeof_collection, avarage_document_length)
         end_time = time.time()
         timeof_part5 += end_time - part_time
         # print('time = ' +  str(end_time - part_time) )
+
+        # print('----- PART 6 Writing rank to document  ------')
+        part_time = time.time()
+        matching.write_rank_to_file(ranking, query_id, file)
+        end_time = time.time()
+        timeof_part6 += end_time - part_time
+        # print('time = ' +  str(end_time - part_time) )
+
+        break
 
     print('----- PART 1 Process queries ------')
     print('time = ' +  str(timeof_part1) )
@@ -76,7 +81,10 @@ def main():
     print('time = ' +  str(timeof_part4) )
     print('----- PART 5 rank using bm25  ------')
     print('time = ' +  str(timeof_part5) )
+    print('----- PART 6 Writing rank to document  ------')
+    print('time = ' +  str(timeof_part6) )
     
+    file.close()
     return 0
 
 if __name__ == "__main__":

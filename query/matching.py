@@ -1,6 +1,6 @@
 
 
-
+import linecache
 import os
 
 def get_documents(index_file, line):
@@ -9,8 +9,9 @@ def get_documents(index_file, line):
     the word in this line, the documents that contain it
     and the term absolute frequency in this document
     '''
-    index_file.seek(0)
+    # index_file.seek(0)
     word_document_dict = {}
+    # line_text  = linecache.getline(index_path + 'index', line)
     for line_number, line_text in enumerate(index_file):
         if line_number == line + 1:
             word, documents = line_text.split(':')
@@ -41,8 +42,9 @@ def create_dict_from_index_line(index_path, query):
     for word_id, word in enumerate(lexicon):
         word = word.replace('\n', '')    
         if word == query_word:
-            index.seek(word_id+1)
-            word_document_dict = get_documents(index, word_id)
+            # index.seek(word_id+2)
+            
+            word_document_dict = get_documents(index, word_id+2)
             query_dict[word] =word_document_dict
             if len(query) == 0: break
             query_word = query.pop(0)
@@ -71,7 +73,7 @@ def update_document_length(index_path, word_document_dict):
 
     document_index = open(index_path + 'document_index', 'r')
     for entry in word_document_dict:
-        document_index.seek(0   )
+        document_index.seek(0)
         documents_keys = sorted(word_document_dict[entry])
         # print(documents_keys)
         for document in documents_keys:
@@ -81,3 +83,15 @@ def update_document_length(index_path, word_document_dict):
     # print(word_document_dict)
     document_index.close()
     return word_document_dict
+
+
+def write_rank_to_file(ranking, query_id, file):
+    '''
+    writes a given rank to a csv file
+    '''
+
+    for docid, score in ranking:
+        file.write(query_id + ',' +  docid + '\n')
+
+    return 
+

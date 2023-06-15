@@ -77,5 +77,6 @@ def rank(query_document_dict,
                                                 sizeof_collection)))
     ranking.sort(key= lambda x:x[1], reverse=True)
     document_index_wrapper.close()
+    # assert len(ranking) >= 100, 'could not find enough relevant documents'
     return ranking[:100]
     

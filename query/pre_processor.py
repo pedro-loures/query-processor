@@ -34,6 +34,8 @@ def get_avarage_document_length(index_path):
     
     print(line_number, total_document_length, avarage_document_length)
     return line_number, total_document_length, avarage_document_length
+
+    
 def process_queries(query_file):
     '''
     given a query csv file (query_id, query) 
