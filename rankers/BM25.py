@@ -53,8 +53,17 @@ def calculate_BM25(query, document, avgdl, f_,documents_per_query, sizeof_collec
 def get_document_size():
     return 0
 
+def make_random_recommendation(ranking, document_index):
+    for document in document_index:
+        if len(ranking) > 100: 
+            break
+        if document not in ranking:
+            ranking.append((document,0))
+    return ranking
+
+
 def rank(query_document_dict,  
-         index_path,
+         document_index,
          sizeof_collection, 
          avarage_document_length):
     query = list(query_document_dict.keys())
@@ -66,7 +75,6 @@ def rank(query_document_dict,
     documents = sorted(documents)
 
 
-    document_index_wrapper = open(index_path + 'document_index', 'r')
     ranking = []
     for document in documents:        
         ranking.append((document, calculate_BM25(query,
@@ -76,7 +84,12 @@ def rank(query_document_dict,
                                                 documents_per_query,
                                                 sizeof_collection)))
     ranking.sort(key= lambda x:x[1], reverse=True)
-    document_index_wrapper.close()
-    # assert len(ranking) >= 100, 'could not find enough relevant documents'
-    return ranking[:100]
+    ranking = {document:score for document, score in ranking[:100]}
+    if len(ranking) < 100:
+        print("could not find enough relevant document, making random reccomendations")
+        ranking = make_random_recommendation(ranking, document_index)
+    
+    
+    assert len(ranking) >= 100, 'could not find enough relevant documents'
+    return ranking
     
