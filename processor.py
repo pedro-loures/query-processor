@@ -25,18 +25,33 @@ def main():
     end_time = time.time()
     timeof_part0 = end_time - part_time
     # print('time = ' +  str(end_time - part_time) )
+    
+    # print('----- PART 0.1 query expansion ------')
+    part_time = time.time()
+    expanded_queries_dictionary = pp.expand_queries(args.query_file, expand = False)
+    end_time = time.time()
+    timeof_part0 = end_time - part_time
+    # print('time = ' +  str(end_time - part_time) )
 
 
 
-
-    # print('----- PART 1 Process queries ------')
+    # print('----- PART 1.1 Process queries ------')
     part_time = time.time()
     queries_dictionary = pp.process_queries(queries_dictionary)
     end_time = time.time()
     timeof_part1 = end_time - part_time
     # print('time = ' +  str(end_time - part_time) )
 
+    # print('----- PART 1.2 Process queries ------')
+    part_time = time.time()
+    expanded_queries_dictionary = pp.process_queries(expanded_queries_dictionary)
+    end_time = time.time()
+    timeof_part1 = end_time - part_time
+    # print('time = ' +  str(end_time - part_time) )
 
+
+    print('comparing queries dictionary', queries_dictionary== expanded_queries_dictionary)
+    print('comparing queries dictionary_Keys', queries_dictionary.keys()== expanded_queries_dictionary.keys())
 
 
     # print('----- PART 2 Get Avarage document_length ------')
@@ -66,7 +81,7 @@ def main():
 
 
 
-    # print(queries_dictionary)
+    print(queries_dictionary)
     timeof_part4 = 0
     timeof_part5 = 0
     timeof_part6 = 0
@@ -82,7 +97,7 @@ def main():
 
         # print('----- PART 4.2 create dict from index keyword line  ------')
         part_time = time.time()
-        query_keyword_dict = matching.create_dict_from_index_line(args.index_file, queries_dictionary[query_id], lexicon_keyword, keyword='_keyword')
+        query_keyword_dict = matching.create_dict_from_index_line(args.index_file, expanded_queries_dictionary[query_id], lexicon_keyword, keyword='_keyword')
         end_time = time.time()
         timeof_part4 += end_time - part_time
         # print('time = ' +  str(end_time - part_time) )
@@ -104,7 +119,7 @@ def main():
         timeof_part5 += end_time - part_time
         # print('time = ' +  str(end_time - part_time) )
 
-
+        print(  'comparing dicts:', query_keyword_dict == query_document_dict)
 
 
         # print('----- PART 6.1 rank using bm25  ------')
@@ -121,12 +136,11 @@ def main():
         timeof_part6 += end_time - part_time
         # print('time = ' +  str(end_time - part_time) )
 
-
-        
+        print('comparing_ranks:', ranking == ranking_keywords)
 
         # print('----- PART 7 summing ranks  ------')
         part_time = time.time()
-        ranking = ensamble.sum_ranks(ranking, ranking_keywords, weight = .5)
+        ranking = ensamble.sum_ranks(ranking, ranking_keywords, weight = 0)
         end_time = time.time()
         timeof_part7 += end_time - part_time
         # print('time = ' +  str(end_time - part_time) )

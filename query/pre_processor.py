@@ -33,7 +33,7 @@ def lemmatize_text(text):
 
     return lemmatized_text
 
-def expand_common_words(query):
+def expand_common_words(query, expand=False):
     # query = query.split(' ')
 
 
@@ -52,7 +52,7 @@ def expand_common_words(query):
 
     added_text = ' '.join(words)
     return text + added_text
-def expand_query(query):
+def expand_query(query, expand=False):
     '''
     GPT function to do query expansion
     add lemmatization
@@ -61,10 +61,10 @@ def expand_query(query):
     expanded_query = []
     for term in query:
         synonyms = wordnet.synsets(term)
-        if synonyms:
+        if synonyms and expand:
             # Add synonyms
-            # synonym = synonyms[0].lemmas()[0].name()
-            # expanded_query.append(synonym)
+            synonym = synonyms[0].lemmas()[0].name()
+            expanded_query.append(synonym)
             
             # Add hypernyms
             # hypernyms = synonyms[0].hypernyms()
@@ -76,6 +76,10 @@ def expand_query(query):
             # for hyponym in hyponyms:
             #     expanded_query.append(hyponym.lemmas()[0].name())
             
+            # Add Common Words
+            common_words = expand_common_words(query)
+            expanded_query.append(common_words)
+
             expanded_query.append(term)
 
         else:
@@ -90,7 +94,7 @@ def expand_query(query):
 
     return text
 
-def expand_queries(queries_file):
+def expand_queries(queries_file, expand=False):
     queries_wrapper = open(queries_file, 'r')
 
     queries_dictionary = {}
@@ -100,7 +104,7 @@ def expand_queries(queries_file):
         
         query_id, text = csv_line.split(',', 1)
         
-        queries_dictionary[query_id] = expand_query(text.split(' '))
+        queries_dictionary[query_id] = expand_query(text.split(' '), expand)
     
     queries_wrapper.close()
     return queries_dictionary

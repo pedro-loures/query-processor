@@ -52,7 +52,8 @@ def create_dict_from_index_line(index_path, query, lexicon, keyword = ''):
 
         documents = set()
         for term in query:
-            documents.update(query_dict[term].keys())
+            if term in query_dict:
+                documents.update(query_dict[term].keys())
 
 
         if len(documents) >= 100:
